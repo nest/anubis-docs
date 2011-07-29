@@ -1,0 +1,119 @@
+Partitioning for the virtualization server
+==========================================
+
+Disk layout for the host machine
+--------------------------------
+
+Here is the disk configuration of Anubis:
+
+* SSD:  Disk /dev/sda: 100.0 GB,   100030242816 bytes
+* SATA: Disk /dev/sdb: 2000.4 GB, 2000398934016 bytes
+* SATA: Disk /dev/sdc: 2000.4 GB, 2000398934016 bytes
+
+Disk layout itself (GPT):
+
+    # parted /dev/sda
+    Model: ATA SAMSUNG MCCOE1HG (scsi)
+    Disk /dev/sda: 100GB
+    Partition Table: gpt
+
+    Number  Start   End    Size   File system  Name  Flags
+     1      1049kB  100GB  100GB                     lvm
+
+    # parted /dev/sd[bc]
+    Model: ATA Hitachi HUA72202 (scsi)
+    Disk /dev/sdb: 2000GB
+    Partition Table: gpt
+
+    Number  Start   End     Size    File system  Name  Flags
+     1      1049kB  211MB   210MB   fat16              boot
+     2      211MB   735MB   524MB   ext4               raid
+     3      735MB   2000GB  2000GB                     raid
+
+The plan was to create one big partition on the SSD drive (/dev/sda) that covers it all and make 2 RAID-1 mdraid arrays on the 2 TB drives (/dev/sdb and /dev/sdc):
+
+* /dev/md0 (1 Gb) for /boot
+* /dev/md1 (rest) for everything else
+
+    # cat /proc/mdstat
+    Personalities : [raid1] 
+    md1 : active raid1 sdb3[0] sdc3[1]
+          1952795516 blocks super 1.1 [2/2] [UU]
+          bitmap: 0/15 pages [0KB], 65536KB chunk
+
+    md0 : active raid1 sdb2[0] sdc2[1]
+          511988 blocks super 1.0 [2/2] [UU]
+
+Justification for the layout: it is always nice to have a big separate /boot partition which can operate even if the array is degraded and does not require LVM to mount. Slow storage is cheap anyway, so there is nothing to lose. The rest of the disk is better managed by LVM, rather than partitions.
+
+Unfortunately, because the BIOS was unable to boot from the drives attached to the PERC controller, I had to opt in for the EFI boot. This means, however, that an additional vfat partition had to be created at the beginning of the SATA drives. The EFI firmware is, of course, incompatible with software RAID, for which reason I needed to come up with software "mirroring" solution to ensure that the system will be able to boot even if one of the SATA drives fails.
+
+Luckily, the EFI partition doesn't contain much information, for which reason Puppet's built-in directory synchronization class has been selected. 
+
+Next, it is necessary to create the LVM volume groups (it is necessary to include the hostname in LVM volume group names to avoid conflicts upon mounting the drives on a different machine shall this become necessary):
+
+* vg_anubis_fast (/dev/sda), comprises the SSD drive(s)
+* vg_anubis_slow (/dev/md1), comprises the normal drives
+
+Note: LVM does not support dashes (-) in the group / volume names!
+
+Regarding the separation of the VM disks and the system stuff: it does not really make sense to create 2 mdraid arrays to cut "vg_anubis_slow" into "vg_anubis_system" and "vg_anubis_virtual".
+
+Of course, it would be nice to have all virtual machines to live in their own volume group, but partitions on disk are clumsy. It is going to be a royal pain to resize "vg_anubis_system" without adding new disks for its physical extents if it is going to be needed.
+
+So best is to create everything inside the "vg_anubis_slow" group and just prepend virtual machine disks with "vm_*" or something.
+
+Naming standards for the virtual machines
+-----------------------------------------
+
+Machines that are going to be used to provide services are to be called "vm_...", e.g.:
+
+    * vm_jenkins
+    * vm_trac
+    * etc.
+
+Machines that are going to be used as buildhosts or ccache nodes are to be called "vm_distro_version" i.e.:
+
+    * vm_debian_testing
+    * vm_ubuntu_latest
+    * vm_ubuntu_10_04
+    * vm_rhel_6
+    * vm_rhel_5
+
+This is needed in order to make group operations easier (snapshotting etc.)
+
+Partitioning scheme for the host machine
+----------------------------------------
+
+Partition sizes:
+
+* 485M: /dev/md0
+* 200M: /dev/sd[bc]1
+
+* 16G: /dev/vg_anubis_fast/host_tmp
+* 24G: /dev/vg_anubis_fast/host_root
+* 24G: /dev/vg_anubis_fast/host_var
+* 16G: /dev/vg_anubis_slow/host_var_log
+* 96G: /dev/vg_anubis_slow/host_swap
+
+Mount options: see `./manifests/files/puppet/fstab`. Partitions residing on SSD drive are to be mounted with *relatime* to prevent pre-mature wear-out.
+
+Additional tweaks to remember
+-----------------------------
+
+* Set the deadline elevator to improve SSD performance:
+
+    echo deadline > /sys/block/sda/queue/scheduler
+    echo 1 > /sys/block/sda/queue/iosched/fifo_batch
+
+* Set the EFI partition as bootable on both drives:
+
+    # parted /dev/sd[bc]
+    (parted) set 1 boot on
+
+TODO:
+-----
+
+Set up lvm backups
+
+
