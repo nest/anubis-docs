@@ -52,33 +52,43 @@ Luckily, the EFI partition doesn't contain much information, for which reason Pu
 
 Next, it is necessary to create the LVM volume groups (it is necessary to include the hostname in LVM volume group names to avoid conflicts upon mounting the drives on a different machine shall this become necessary):
 
-* vg_anubis_fast (/dev/sda), comprises the SSD drive(s)
-* vg_anubis_slow (/dev/md1), comprises the normal drives
+* `vg_anubis_fast` (/dev/sda), comprises the SSD drive(s)
+* `vg_anubis_slow` (/dev/md1), comprises the normal drives
 
 Note: LVM does not support dashes (-) in the group / volume names!
 
-Regarding the separation of the VM disks and the system stuff: it does not really make sense to create 2 mdraid arrays to cut "vg_anubis_slow" into "vg_anubis_system" and "vg_anubis_virtual".
+Regarding the separation of the VM disks and the system stuff: it does not really make sense to create 2 mdraid arrays to cut `vg_anubis_slow` into `vg_anubis_system` and `vg_anubis_virtual`.
 
-Of course, it would be nice to have all virtual machines to live in their own volume group, but partitions on disk are clumsy. It is going to be a royal pain to resize "vg_anubis_system" without adding new disks for its physical extents if it is going to be needed.
+Of course, it would be nice to have all virtual machines to live in their own volume group, but partitions on disk are clumsy. It is going to be a royal pain to resize `vg_anubis_system` without adding new disks for its physical extents if it is going to be needed.
 
-So best is to create everything inside the "vg_anubis_slow" group and just prepend virtual machine disks with "vm_*" or something.
+N.B. To this end, LVM Object tags can be used, e.g. a _vm_ tag can be attached to all logical volumes that are used for virtual machines. For now this complication was deemed to be unnecessary.
+
+So best is to create everything inside the `vg_anubis_slow` group and just prepend virtual machine disks with `vm_*` or something.
+
 
 Naming standards for the virtual machines
 -----------------------------------------
 
-Machines that are going to be used to provide services are to be called "vm_...", e.g.:
+Machines that are going to be used to provide services are to be called `vm_...`, e.g.:
 
-    * vm_jenkins
-    * vm_trac
-    * etc.
+* `vm_jenkins_main`
+* `vm_jenkins_swap`
+* `vm_trac_main`
+* etc.
 
-Machines that are going to be used as buildhosts or ccache nodes are to be called "vm_distro_version" i.e.:
+Machines that are going to be used as buildhosts or ccache nodes are to be called `vm_distro-version` i.e.:
 
-    * vm_debian_testing
-    * vm_ubuntu_latest
-    * vm_ubuntu_10_04
-    * vm_rhel_6
-    * vm_rhel_5
+* `vm_fc-15-i386_main`
+* `vm_debian-testing_man`
+* `vm_ubuntu-10-04_main`
+* `vm_rhel-6_main`
+* `vm_rhel-5_main`
+
+N.B. Re: `-` vs. `_`. Anaconda apparently still has problems handling `-` upon installation [[1]][rh], so the initial groups and volumes were created with `_` instead.
+
+After installation this is not really an issue (1) and dashes are used as the host names in Puppet descriptions anyway (2), hence the dashes in the middle. Not ideal, but OK.
+
+  [1]: https://bugzilla.redhat.com/show_bug.cgi?id=430907
 
 This is needed in order to make group operations easier (snapshotting etc.)
 
@@ -87,33 +97,27 @@ Partitioning scheme for the host machine
 
 Partition sizes:
 
-* 485M: /dev/md0
-* 200M: /dev/sd[bc]1
+* 485M: `/dev/md0`
+* 200M: `/dev/sd[bc]1`
 
-* 16G: /dev/vg_anubis_fast/host_tmp
-* 24G: /dev/vg_anubis_fast/host_root
-* 24G: /dev/vg_anubis_fast/host_var
-* 16G: /dev/vg_anubis_slow/host_var_log
-* 96G: /dev/vg_anubis_slow/host_swap
+* 16G: `/dev/vg_anubis_fast/host_tmp`
+* 24G: `/dev/vg_anubis_fast/host_root`
+* 24G: `/dev/vg_anubis_fast/host_var`
+* 16G: `/dev/vg_anubis_slow/host_var_log`
+* 96G: `/dev/vg_anubis_slow/host_swap`
 
 Mount options: see `./manifests/files/puppet/fstab`. Partitions residing on SSD drive are to be mounted with *relatime* to prevent pre-mature wear-out.
 
 Additional tweaks to remember
 -----------------------------
 
-* Set the deadline elevator to improve SSD performance:
+- Set the deadline elevator to improve SSD performance:
 
     echo deadline > /sys/block/sda/queue/scheduler
     echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 
-* Set the EFI partition as bootable on both drives:
+- Set the EFI partition as bootable on both drives:
 
     # parted /dev/sd[bc]
     (parted) set 1 boot on
-
-TODO:
------
-
-Set up lvm backups
-
 
