@@ -1,0 +1,68 @@
+Virtualization server backup strategy
+=====================================
+
+Introduction
+------------
+
+At some point I initiated a discussion on how to back up the whole thing.
+
+The outcome was that probably the best idea is to use LVM as much as possible to be able to make temporary snapshots, and from that point on, send the data to upstream (externally managed backup pool), whatever it is and delete the snapshots after use.
+
+This would allow for making atomic backup copies of the virtual machines as a whole with minimum downtime. The rest of the data can be placed into specific directories declared to the backup service and backed up this way.
+
+In our case, the storage pool could be either:
+
+1. A pre-configured rsync target, or
+2. An account with TSM (Tivoli Storage Manager)
+
+Neither of these options was implemented so far, because for now the amount of data that actually needs to be backed up is very small, so manual backup or some simple hack would do for now (see below).
+
+What actually needs to be backed up
+-----------------------------------
+
+The infrastructure is (more or less) fully described in Puppet language and [the git repository holding the description][anubis-puppet] is available on the net.
+
+Hence, it does not make sense to back (most of) the virtual machines as a whole, because they can be re-created from the kickstart / configuration at any time.
+
+  [anubis-puppet]: http://git.zaytsev.net/?p=anubis-puppet.git;a=summary
+
+The things that actually need to be backed up:
+
+1. /srv on the puppet machine (virtualization host)
+    This folder contains isos, kickstarts and infra package repos.
+     a. `iso` should probably be moved on to a slow storage
+     b. `kickstarts` contain generated files and [updates.img][anaconda-updates] for FC 15 (should be renamed to make it clear why and what for?)
+     c. `repos` for now contains RHEL 6 infra repos (puppet, augeas, jenkins) and FC 15 bootstrapping repos (puppet)
+2. Jenkins home directory on the jenkins machine (/var/lib/jenkins)
+    This directory contains everything that pertains to Jenkins and should be backed up periodically and especially before updates.
+3. libvirt machine descriptions, this should be puppet-ized in the nearest future.
+
+  [anaconda-updates]: http://fedoraproject.org/wiki/Anaconda/Updates
+
+Backup strategy for LVM-based containers
+----------------------------------------
+
+(this is taken from a discussion @ INCF, needs revision)
+
+A valid backup strategy would be to:
+
+1) Make LVM snapshots of all virtual machines
+2) FSCK them one by one just in case
+3) Mount them all on the host [*][libguesfs]
+4) Trigger manual TSM backup
+5) Unmount the snapshots
+6) Remove the snapshots
+
+  [libguestfs]: the best idea would probably be to use libguestfs to avoid relying on hackery like offset mounts and trying to mount LVM volumes inside the machine which might also happen.
+
+The restore strategy would be then doing the same but in the opposite order:
+1) Make an LVM snapshot of the machine in question
+2) Re-initialize the file system
+3) Mount it on the host
+4) Perform a TSM restore
+5) Unmount the file system
+6) Mark the snapshot as independent
+7) Stop the machine and kill the old volume
+8) Rename the backup snapshot to the old volume's name
+9) Start the machine and PROFIT!!!
+
