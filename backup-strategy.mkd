@@ -28,15 +28,22 @@ Hence, it does not make sense to back (most of) the virtual machines as a whole,
 
 The things that actually need to be backed up:
 
-1. /srv on the puppet machine (virtualization host)
-    This folder contains isos, kickstarts and infra package repos.
-     a. `iso` should probably be moved on to a slow storage
-     b. `kickstarts` contain generated files and [updates.img][anaconda-updates] for FC 15 (should be renamed to make it clear why and what for?)
-     c. `repos` for now contains RHEL 6 infra repos (puppet, augeas, jenkins) and FC 15 bootstrapping repos (puppet)
-2. Jenkins home directory on the jenkins machine (/var/lib/jenkins)
-    This directory contains everything that pertains to Jenkins and should be backed up periodically and especially before updates.
-3. libvirt machine descriptions, this should be puppet-ized in the nearest future.
-
+1. `/srv/infra` on the puppet machine (virtualization host)
+ 
+ This folder contains ISOs, kickstarts and infra package repos.
+  
+    - `isos` should probably be moved on to a slow storage
+  
+    - `kickstarts` contain generated files and [`updates.img`][anaconda-updates] for FC 15 (should be renamed to make it clear why and what is it for?)
+  
+    - `repos` for now contains RHEL 6 infra repos (`puppet`, `augeas`, `jenkins`) and FC 15 bootstrapping repos (`puppet`)
+ 
+2. Jenkins home directory on the jenkins machine (`/var/lib/jenkins`)
+ 
+ This directory contains everything that pertains to Jenkins and should be backed up periodically and especially before updates.
+ 
+3. libvirt machine descriptions (this should be puppet-ized in the nearest future!)
+ 
   [anaconda-updates]: http://fedoraproject.org/wiki/Anaconda/Updates
 
 Backup strategy for LVM-based containers
@@ -46,23 +53,24 @@ Backup strategy for LVM-based containers
 
 A valid backup strategy would be to:
 
-1) Make LVM snapshots of all virtual machines
-2) FSCK them one by one just in case
-3) Mount them all on the host [*][libguesfs]
-4) Trigger manual TSM backup
-5) Unmount the snapshots
-6) Remove the snapshots
+1. Make LVM snapshots of all virtual machines
+2. FSCK them one by one just in case
+3. Mount them all on the host [*][libguestfs]
+4. Trigger manual TSM backup
+5. Unmount the snapshots
+6. Remove the snapshots
 
-  [libguestfs]: the best idea would probably be to use libguestfs to avoid relying on hackery like offset mounts and trying to mount LVM volumes inside the machine which might also happen.
+  [libguestfs]: # (The best idea would probably be to use libguestfs to avoid relying on hackery like offset mounts and trying to mount LVM volumes inside the machine which might also happen...)
 
 The restore strategy would be then doing the same but in the opposite order:
-1) Make an LVM snapshot of the machine in question
-2) Re-initialize the file system
-3) Mount it on the host
-4) Perform a TSM restore
-5) Unmount the file system
-6) Mark the snapshot as independent
-7) Stop the machine and kill the old volume
-8) Rename the backup snapshot to the old volume's name
-9) Start the machine and PROFIT!!!
+
+1. Make an LVM snapshot of the machine in question
+2. Re-initialize the file system
+3. Mount it on the host
+4. Perform a TSM restore
+5. Unmount the file system
+6. Mark the snapshot as independent
+7. Stop the machine and kill the old volume
+8. Rename the backup snapshot to the old volume's name
+9. Start the machine and PROFIT!!!
 
