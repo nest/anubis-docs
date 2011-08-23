@@ -1,0 +1,89 @@
+Future Plans for NEST QA and Infrastructure
+===========================================
+
+- Jenkins
+  
+    + Implement parameterized builds
+  
+      To this end it will be needed to decide on which configurations are needed most, because rebuilding takes time.
+      
+      The number of possible options to try is 2^N, where N is the number of features, so either we should limit ourselves to 3-4 features or think of which combinations of features are most needed (effectively reducing the number of features, by replacing features with combinations).
+  
+        * --with-mpi / --without-mpi
+        * --with-gsl / --without-gsl
+        * --with-music / --without-music
+        * --without-readline
+        * --without-pthread
+        * --without-python
+  
+    + Add more build slaves to the system
+  
+        * Fedora Core 15 `x86_64` host
+        * Scientific Linux 6 `i386` and `x86_64`
+        * Debian Testing (need to figure out kickstarting!)
+        * Exotic systems, e.g. FreeBSD, Solaris
+  
+    + Set up a multi-host build configuration for `trunk`
+  
+    + Fix `make dist` and add tarball generation to the build job
+  
+    + Build from bootstrapped tarballs, not checkouts
+  
+    + Adapt the release scripts to cut releases from the QA
+  
+- Infrastructure / Puppet
+  
+    + The kickstart generation mess should be improved
+  
+    + libvirt management should be split into a separate module
+  
+    + Machine definitions should be managed by Puppet
+  
+    + The IP addresses should be distributed via DHCP
+  
+    + Install a monitoring solution
+  
+        * Cacti
+  
+            This one is absolutely great for graphing, very simple to set up, but when notifications get involved it becomes very hacky; also Cacti doesn't scale well
+  
+        * Icinga / Nagios
+  
+            Very flexible and professional monitoring, but where did the graphing go? Also very complex to set up
+  
+        * OpenNMS
+  
+            Great generic toolkit, too low-level for small deployments
+  
+        * Zabbix
+  
+            This is probably the way to go, has both graphing and notifications, but the complexity is kept at a reasonable level
+  
+- NEST build system and infrastructure
+  
+    + Sort out issues that prevent packaging and *DO IT*
+  
+    + Kill libtool 1.5; finally migrate to `autoreconf`
+  
+    + Revamp configure.ac; *LOTS* of cleanup needed
+  
+    + Clean up `automake` templates
+  
+    + Remove dependencies upon hard-coded paths
+  
+    + Revamp MyModule build system
+  
+    + Re-do `make dist` to properly package the tarballs
+  
+    + Design a way to auto-discover modules or at least use a probe list
+  
+    + Integrate disparate tests in a common test suite
+  
+    + Remove library versioning that depends on keywords expansion
+  
+    + Set up a git mirror; later migrate to git completely
+  
+    + Introduce feature branch based workflow
+  
+    + Introduce code reviews for stuff that gets into `master`
+
