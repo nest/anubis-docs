@@ -33,6 +33,8 @@ Future Plans for NEST QA and Infrastructure
   
 - Infrastructure / Puppet
   
+    + *DONE!* Set up smartmontools to monitor virtualization server drives
+  
     + The kickstart generation mess should be improved
   
     + libvirt management should be split into a separate module
