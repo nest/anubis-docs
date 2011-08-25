@@ -10,6 +10,7 @@ SOURCES = \
 	infra-server/backup-strategy.mkd \
 	infra-server/future-plans.mkd \
 	infra-server/host-partitioning.mkd \
+	infra-server/setup-guide.mkd \
 
 TARGETS = $(SOURCES:%.mkd=$(OUTDIR)/%.html)
 

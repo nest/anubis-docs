@@ -73,12 +73,14 @@ Bootstrapping
     + Register with RHN (`rhn_register`) and upgrade / reboot the system
     + Put infra stuff into `/srv/infra/repos/rhel-6Server-local/{SRPMS,i386,noarch,x86_64}`
     + Install infra packages via `yum localinstall ...` (`puppet`, `puppet-server` etc.)
+  
     + Install `git`, clone the configuration in `/etc/puppet` and apply it:
         * `git clone git://git.zaytsev.net/anubis-puppet.git /etc/puppet`
         * `cd /etc/puppet`
         * `git submodule init`
         * `git submodule update`
         * `puppet agent --test`
+  
     + Check that everything went well!
   
   [dell-firmware]: http://yury.zaytsev.net/press/2011/06/04/dell-poweredge-r710-firmware.html
@@ -115,18 +117,18 @@ Bootstrapping
         * For _Red Hat Enterprise Linux 6_:
             - `vmlinuz initrd=initrd.img ks=http://puppet.qa.nest-initiative.org/kickstarts/jenkins-ks.cfg`
   
-  + Register with RHN (if applicable)
+    + Register with RHN (if applicable)
   
-  + Wait for the Puppet certification request to come in:
+    + Wait for the Puppet certification request to come in:
   
-    * `puppetca --list`
-    * `puppetca --sign foo.qa.nest-initiative.org`
+        * `puppetca --list`
+        * `puppetca --sign foo.qa.nest-initiative.org`
   
-  + Wait for Puppet to bring the host into compliance
+    + Wait for Puppet to bring the host into compliance
   
-  + Log into the host and check that everything is alright
+    + Log into the host and check that everything is alright
   
-  + Add the node to Jenkins (if applicable)
+    + Add the node to Jenkins (if applicable)
 
 Puppet master
 -------------
