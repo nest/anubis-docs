@@ -88,7 +88,7 @@ N.B. Re: `-` vs. `_`. Anaconda apparently still has problems handling `-` upon i
 
 After installation this is not really an issue (1) and dashes are used as the host names in Puppet descriptions anyway (2), hence the dashes in the middle. Not ideal, but OK.
 
-  [1]: https://bugzilla.redhat.com/show_bug.cgi?id=430907
+  [rh]: https://bugzilla.redhat.com/show_bug.cgi?id=430907
 
 This is needed in order to make group operations easier (snapshotting etc.)
 
