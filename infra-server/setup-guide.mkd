@@ -1,0 +1,186 @@
+Installation / Quick-Start Guide
+================================
+
+This is a very rough and incomplete guide to help you to get the setup running.
+
+It will not explain the details, but rather contain a broad overview on how things work and why it was decided to do it this way, as well as a collection of links to the sources and documentation that might be of use.
+
+Infrastructure topology
+-----------------------
+
+The infrastructure resides on a `Dell PowerEdge R710` server, hosted in a private BCF rack at Uni Freiburg (1 SSD, 2 HDD, 12 HT CPU, 48 GB RAM). It is connected to a 1 GigE link via the University network.
+
+The server runs *Red Hat Enterprise Linux 6 Server* and has a Virtualization entitlement. _KVM_ is used as a hypervisor, managed via _libvirt_ API. It runs no other public services apart from SSH and provides KVM guests with infrastructural services.
+
+Virtualization server facts
+---------------------------
+
+### Running services
+
+- Public:
+  
+    + Port 22  (OpenSSH server on the virtualization host)
+    + Port 80  (forwarded into jenkins.qa.nest-initiative.org)
+    + Port 443 (forwarded into jenkins.qa.nest-initiative.org)
+  
+- Private (for KVM guests):
+  
+    + Mail relay (smarthosts via Uni Freiburg mail server, when in doubt or misery contact Claudia Herold <claudia.herold@rz.uni-freiburg.de>)
+    + DNS server (managed via `libvirt`)
+    + DHCP server (managed via `libvirt`)
+    + NAT server via a bridge (managed via `libvirt`)
+    + LVM storage server (all machines are alloted logical volumes)
+    + Web server hosting infra repos (Apache)
+    + Puppet master server
+    + Puppet file server (WEBrick)
+
+*N.B.* Forwarding is done via `qemu` hooks, because `libvirt` messes up with FORWARD table, this is by no means an obvious setup, just know it so that you know where to look for it next time around.
+
+### Puppet server
+
+The server runs [Puppet][pkg-puppet], [facter][pkg-facter] and [augeas][pkg-augeas] packages available in source and binary forms from [RepoForge][repoforge] (bonus points will be awarded to those who would guess who is the maintainer of those packages!)
+
+  [repoforge]: https://github.com/repoforge/rpms
+  [pkg-puppet]: http://pkgs.repoforge.org/puppet/
+  [pkg-facter]: http://pkgs.repoforge.org/facter/
+  [pkg-augeas]: http://pkgs.repoforge.org/augeas/
+
+The configuration is available from the [public git repository][anubis-puppet] and so is the [documentation][anubis-docs].
+
+  [anubis-docs]: http://git.zaytsev.net/?p=anubis-docs.git;a=summary
+  [anubis-puppet]: http://git.zaytsev.net/?p=anubis-puppet.git;a=summary
+
+### Red Hat Network
+
+The virtualization server itself and privileged guests, such as the Jenkins server are registered with RHN. They are kept up to date with latest updates installed automatically as they come out through RHN as well.
+
+The following people have [Red Hat accounts][redhat-account] entitled to access RHN at this point:
+
+- Yury V. Zaytsev (BCF)
+- Bernd Wiebelt (BCF / FZ-J)
+
+  [redhat-account]: https://www.redhat.com/wapps/ugc
+
+Bootstrapping
+-------------
+
+- Set up the virtualization host
+  
+    + *ALWAYS* Upgrade to the [latest firmware][dell-firmware], remember the [four letter word][ssd-woes] (Dell)
+  
+    + Download the ISOs from RHN, burn and insert or mount via CIFS using iDRAC
+    + Use the kickstart (`manifests/templates/rhel-6-anubis-ks.cfg`) or answer the questions manually
+    + Register with RHN (`rhn_register`) and upgrade / reboot the system
+    + Put infra stuff into `/srv/infra/repos/rhel-6Server-local/{SRPMS,i386,noarch,x86_64}`
+    + Install infra packages via `yum localinstall ...` (`puppet`, `puppet-server` etc.)
+    + Install `git`, clone the configuration in `/etc/puppet` and apply it:
+        * `git clone git://git.zaytsev.net/anubis-puppet.git /etc/puppet`
+        * `cd /etc/puppet`
+        * `git submodule init`
+        * `git submodule update`
+        * `puppet agent --test`
+    + Check that everything went well!
+  
+  [dell-firmware]: http://yury.zaytsev.net/press/2011/06/04/dell-poweredge-r710-firmware.html
+  [ssd-woes]: http://yury.zaytsev.net/press/2011/06/07/minimum-io-size-and-buggy-firmware.html
+
+- Set up the guests
+  
+    + Download the ISOs into `/srv/infra/isos`
+  
+    + Add the guest settings into Puppet `libvirt` module to generate kickstarts and update DHCP / DNS configuration
+  
+    + Add node settings into Puppet that would apply to this new host (`nodes.pp`)
+  
+    + *Remember*, for now when `libvirt` network is restarted, you need to re-attach the interfaces or simply reboot all the guests for them to re-gain network connectivity; hopefully `libvirt` people will fix it at some point
+  
+    + To manually add a guest via `virt-manager` (should be eventually done through Puppet):
+  
+        * Enable X Forwarding in your local `~/.ssh/config`
+  
+        * As your user: `xauth list`
+  
+        * As `root`: 
+            - `xauth add ...`
+            - `export DISPLAY=localhost:10`
+            - `virt-manager`
+  
+        * Use FQDN for the hosts that will have be registered with RHN
+  
+    + If applicable, use kickstart to set up the guest (add extra kernel parameters as you boot from the DVD)
+  
+        * For _Fedora Core 15_ (only DVD version can be kickstarted):
+            - `vmlinuz initrd=initrd.img updates=http://puppet.qa.nest-initiative.org/kickstarts/fc-15-updates.img ks=http://puppet.qa.nest-initiative.org/kickstarts/fc-15-i386-ks.cfg`
+  
+        * For _Red Hat Enterprise Linux 6_:
+            - `vmlinuz initrd=initrd.img ks=http://puppet.qa.nest-initiative.org/kickstarts/jenkins-ks.cfg`
+  
+  + Register with RHN (if applicable)
+  
+  + Wait for the Puppet certification request to come in:
+  
+    * `puppetca --list`
+    * `puppetca --sign foo.qa.nest-initiative.org`
+  
+  + Wait for Puppet to bring the host into compliance
+  
+  + Log into the host and check that everything is alright
+  
+  + Add the node to Jenkins (if applicable)
+
+Puppet master
+-------------
+
+[Puppet][puppet-site] is amazing. [Puppet][puppet-github] is very cool. Puppet is great (no links here).
+
+  [puppet-site]: http://www.puppetlabs.com/
+  [puppet-github]: https://github.com/puppetlabs/
+
+### Documentation
+
+- Resource Number 0: Puppet [language reference][puppet-language]
+- Resource Number 1: Puppet [types documentation][puppet-types]
+- Resource Number 2: Puppet [functions documentation][puppet-functions]
+- Resource Number 3: Puppet [templating guide][puppet-templates]
+- Puppet [patterns][puppet-patterns-1], [more patterns][puppet-patterns-2]
+- Puppet [forge][puppet-forge], [modules][puppet-modules]
+- [Pro Puppet][puppet-book]
+- #puppet at irc.freenode.net
+
+  [puppet-language]: http://docs.puppetlabs.com/guides/language_guide.html
+  [puppet-types]: http://docs.puppetlabs.com/references/stable/type.html
+  [puppet-functions]: http://docs.puppetlabs.com/references/stable/function.html
+  [puppet-templates]: http://docs.puppetlabs.com/guides/templating.html
+  [puppet-patterns-1]: http://projects.puppetlabs.com/projects/puppet/wiki/Puppet_Patterns
+  [puppet-patterns-2]: http://projects.puppetlabs.com/projects/puppet/wiki/Patterns
+  [puppet-forge]: http://forge.puppetlabs.com/
+  [puppet-modules]: http://projects.puppetlabs.com/projects/puppet/wiki/Puppet_Modules
+  [puppet-book]: http://www.apress.com/9781430230571
+
+Jenkins server
+--------------
+
+The Jenkins server (RHEL 6) is running at `jenkins.qa.nest-initiative.org`. It should be generally running the latest stable (LTS) release offered by Jenkins community (in form of RPM packages).
+
+- The server runs on SSD as an exception; it also has a seizable amount of memory and some swap on the slow drive to avoid out of memory crashes, increase if necessary for stable operation.
+
+- The Java servlet runs inside a container called `Winstone` shipped with Jenkins as it turned out that putting it into a dedicated application server has no advantages if only such an application server is not already deployed (it's not).
+
+- It also uses `Winstone` built-in HTTPS server; HTTP is disabled for good and served by Apache which just blindly redirects everything to HTTPS for the time being.
+
+- The server itself only coordinates slaves, it doesn't do builds, and please keep it this way.
+
+- The SSL certificate is self-signed for the time being.
+
+*WARNING!* Do _NOT_ upgrade Jenkins server without backing up the Jenkins home directory (`/var/lib/jenkins`) first! I can't stress this enough. Just don't do it, OK? Thanks!
+
+### Further issues and miscellanea
+
+- Set up backups (tar, rsync or just use a private [svn/git][jenkins-backups]?)
+
+  [jenkins-backups]: http://jenkins-ci.org/content/keeping-your-configuration-and-data-subversion
+
+- There is a [very nice book on Jenkins][jenkins-book] by Wakaleo Consulting
+
+  [jenkins-book]: http://www.wakaleo.com/books/jenkins-the-definitive-guide
+
