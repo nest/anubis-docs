@@ -34,7 +34,7 @@ The things that actually need to be backed up:
   
     - `isos` should probably be moved on to a slow storage
   
-    - `kickstarts` contain generated files and [`updates.img`][anaconda-updates] for FC 15 (should be renamed to make it clear why and what is it for?)
+    - `kickstarts` contain generated files and [`fc-15-updates.img`][anaconda-updates] for FC 15
   
     - `repos` for now contains RHEL 6 infra repos (`puppet`, `augeas`, `jenkins`) and FC 15 bootstrapping repos (`puppet`)
  
