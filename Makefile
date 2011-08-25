@@ -6,6 +6,7 @@ OUTDIR = html
 
 SOURCES = \
 	README.mkd \
+	gsoc-report/README.mkd \
 	infra-server/backup-strategy.mkd \
 	infra-server/future-plans.mkd \
 	infra-server/host-partitioning.mkd \
