@@ -35,14 +35,14 @@ The plan was to create one big partition on the SSD drive (/dev/sda) that covers
 * /dev/md0 (1 Gb) for /boot
 * /dev/md1 (rest) for everything else
 
-    # cat /proc/mdstat
-    Personalities : [raid1] 
-    md1 : active raid1 sdb3[0] sdc3[1]
-          1952795516 blocks super 1.1 [2/2] [UU]
-          bitmap: 0/15 pages [0KB], 65536KB chunk
+        # cat /proc/mdstat
+        Personalities : [raid1] 
+        md1 : active raid1 sdb3[0] sdc3[1]
+              1952795516 blocks super 1.1 [2/2] [UU]
+              bitmap: 0/15 pages [0KB], 65536KB chunk
 
-    md0 : active raid1 sdb2[0] sdc2[1]
-          511988 blocks super 1.0 [2/2] [UU]
+        md0 : active raid1 sdb2[0] sdc2[1]
+              511988 blocks super 1.0 [2/2] [UU]
 
 Justification for the layout: it is always nice to have a big separate /boot partition which can operate even if the array is degraded and does not require LVM to mount. Slow storage is cheap anyway, so there is nothing to lose. The rest of the disk is better managed by LVM, rather than partitions.
 
@@ -113,11 +113,11 @@ Additional tweaks to remember
 
 - Set the deadline elevator to improve SSD performance:
 
-    echo deadline > /sys/block/sda/queue/scheduler
-    echo 1 > /sys/block/sda/queue/iosched/fifo_batch
+        echo deadline > /sys/block/sda/queue/scheduler
+        echo 1 > /sys/block/sda/queue/iosched/fifo_batch
 
 - Set the EFI partition as bootable on both drives:
 
-    # parted /dev/sd[bc]
-    (parted) set 1 boot on
+        # parted /dev/sd[bc]
+        (parted) set 1 boot on
 
