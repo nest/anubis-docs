@@ -1,7 +1,8 @@
 Documentation for NEST Service Infrastructure
 =============================================
 
-This repository contains miscellaneous documentation that pertains to the NEST service infrastructure project.
+This repository contains miscellaneous documentation that pertains to the
+NEST service infrastructure project.
 
 License
 -------
