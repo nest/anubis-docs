@@ -35,13 +35,17 @@ Future Plans for NEST QA and Infrastructure
   
     + *DONE!* Set up smartmontools to monitor virtualization server drives
   
-    + The kickstart generation mess should be improved
+    + *DONE!* The IP addresses should be distributed via DHCP
+  
+    + *DONE!* The kickstart generation mess should be improved
   
     + libvirt management should be split into a separate module
   
     + Machine definitions should be managed by Puppet
   
-    + The IP addresses should be distributed via DHCP
+    + Move `ks_info` members to `ks_guest` (hashes in `libvirt::params`)
+  
+    + Machines should be fully described by hashes in `libvirt::params`, classes for host entries and maybe LVM volumes (at least _main_ and _swap_) should be generated automatically
   
     + Install a monitoring solution
   
