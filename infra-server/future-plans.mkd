@@ -39,6 +39,8 @@ Future Plans for NEST QA and Infrastructure
   
     + *DONE!* The kickstart generation mess should be improved
   
+    + Update to Puppet 2.7.3 (beware! new SELinux policy is not out yet, convert join() calls to anonymous arrays, check release notes, to see if anything else needs to be revised...)
+  
     + libvirt management should be split into a separate module
   
     + Machine definitions should be managed by Puppet
@@ -46,6 +48,8 @@ Future Plans for NEST QA and Infrastructure
     + Move `ks_info` members to `ks_guest` (hashes in `libvirt::params`)
   
     + Machines should be fully described by hashes in `libvirt::params`, classes for host entries and maybe LVM volumes (at least _main_ and _swap_) should be generated automatically
+  
+    + Put `/srv/infra/isos` on a dedicated volume group on the slow drives one day; shrink the root to make more space for other needs
   
     + Install a monitoring solution
   
