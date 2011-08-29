@@ -35,6 +35,8 @@ Future Plans for NEST QA and Infrastructure
   
     + Adapt the release scripts to cut releases from the QA
   
+    + Consider getting an SSL certificate from DFN
+  
 - Infrastructure / Puppet
   
     + *DONE!* Set up smartmontools to monitor virtualization server drives
