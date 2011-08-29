@@ -4,37 +4,37 @@ GSoC Code Samples Submission
 Deliverables
 ------------
 
-* The `puppet` directory contains production Puppet code to manage the current QA infrastructure. This is the major piece of code created during the project.
- 
-* The server went live and is available at the following URL: <http://qa.nest-initiative.org>. The repositories hosting the [documentation][anubis-docs] and [configuration][anubis-puppet] are also available online.
+* `anubis-puppet` directory contains the snapshot of the production Puppet code to manage the current QA infrastructure made right before the _pencils down_ deadline as per the code sample submission guidelines. This is the major piece of code that was created during the project.
+
+* The server went live and is available at the following URL: <http://qa.nest-initiative.org>. The repositories hosting the up to date versions of the [configuration (`anubis-puppet`)][anubis-puppet] and [documentation (`anubis-docs`)][anubis-docs] are also available online. Please refer to these repositories to see what is the current state of affairs.
   
   [anubis-docs]: http://git.zaytsev.net/?p=anubis-docs.git;a=summary
   [anubis-puppet]: http://git.zaytsev.net/?p=anubis-puppet.git;a=summary
- 
+
 * The rest of the directories contain significant patches developed during the program and submitted to the respective projects (along with the bug reports or enhancement requests).
 
 ### Source code and patches
 
-- anubis-docs (infrastructure documentation)
-- anubis-puppet (infrastructure description)
-- nest (patches, scripts and survey report)
-    + nest/testsuite-junit
-    + nest/libtool-1.5-removal
-    + nest/livecd-scripts
-    + nest/users-survey
-    + nest/users-survey/src
-- facter (patches)
-- e2fsprogs (patches)
-- repoforge (patches)
-    + facter
-    + ruby
-    + puppet
-    + augeas
-    + qemu
-    + mock
-    + mrepo
-- mock (patches)
-- mrepo (patchset)
+- `anubis-docs` (infrastructure documentation)
+- `anubis-puppet` (infrastructure description)
+- `nest` (patches, scripts and survey report)
+    + `nest/testsuite-junit`
+    + `nest/libtool-1.5-removal`
+    + `nest/livecd-scripts`
+    + `nest/users-survey`
+    + `nest/users-survey/src`
+- `facter` (patches)
+- `e2fsprogs` (patches)
+- `repoforge` (patches)
+    + `facter`
+    + `ruby`
+    + `puppet`
+    + `augeas`
+    + `qemu`
+    + `mock`
+    + `mrepo`
+- `mock` (patches)
+- `mrepo` (patch set)
 
 ### Bug reports
 
@@ -66,12 +66,12 @@ Deliverables
 Project timeline
 ----------------
 
-The course of the project was as follows:
+This section contains a very brief report on the course of the project. Details on what steps have been taken and which conclusions have been drawn are below:
 
 - Mock RPM build host was created in order to be able to produce packages for _Red Hat Enterprise Linux 6_, which has been chosen as a basis operating system on top of which the infrastructure were to be deployed.
   
-    + mock packaging has been updated
-    + mrepo was ported to RHEL 6
+    + `mock` packaging has been updated
+    + `mrepo` was ported to RHEL 6
  
  These contributions have been committed to [RepoForge][rf].
  
@@ -79,36 +79,38 @@ The course of the project was as follows:
  
 - The hardware was installed and the work on the infrastructure description begun. The following packages have been created / updated / backported to RHEL 6 (and subsequently committed to RepoForge):
   
-    + augeas
-    + ruby-augeas
-    + facter
-    + puppet
- 
-- In the mean time, a [patch for e2fsprogs][patchwork] was created to fix a problem encountered during the installation of RHEL on real hardware.
+    + `augeas`
+    + `ruby-augeas`
+    + `facter`
+    + `puppet`
+   
+    * In the mean time, a [patch for `e2fsprogs`][patchwork] was created to fix a problem encountered during the installation of RHEL 6 on real hardware.
   
   [patchwork]: http://patchwork.ozlabs.org/patch/109351/
  
-- When the infrastructure description was reasonably complete and functional, Jenkins was set up and a first build executor was added.
- 
-- In the mean time, NEST survey was performed which resulted in a report detailing the current NEST users profile and the directions for future development.
+- When the infrastructure description was reasonably complete and functional, Jenkins was set up and a first build executor was added (Jenkins was a clear choice for its ease of use, convenient packaging and extensibility).
+  
+    * In the mean time, NEST survey was performed which resulted in a report detailing the current NEST users profile and the directions for future development.
  
 - Patches for NEST have been created in order to allow it to build on the continuous integration host.
-
-- In the mean time, it was concluded that although ccache can be packaged (basic packaging difficulty: intermediate) and deployed on the machines, kickstarted in a very same way as the build executors (deployment difficulty: easy), it is not very profitable in the context of NEST.
   
-    + Even single-threaded builds on tmpfs only take ~4 minutes, so it makes much more sense to put the work into the build system in order to allow for maximum parallelism (and ideally migrate from a _recursive_ build system to a _non-recursive_ build system, allowing `make` to build a complete dependency graph and further optimize the build process [[miller]][bs]) to reduce build times and solidify the software.
- 
+    + In the mean time, it was concluded that although `ccache` can be packaged (basic packaging difficulty: intermediate) and deployed on the machines, kickstarted in a very same way as the build executors (deployment difficulty: easy), it is not very profitable in the context of NEST.
+  
+    + Even single-threaded builds on `tmpfs` only take ~4 minutes, so it makes much more sense to put the work into the build system in order to allow for maximum parallelism (and ideally migrate from a _recursive_ build system to a _non-recursive_ build system, allowing `make` to build a complete dependency graph and further optimize the build process [[miller]][bs]) to reduce build times and solidify the software.
+  
   [bs]: http://miller.emu.id.au/pmiller/books/rmch/
- 
+  
     + An instruction on how to set up `tmpfs` build root is probably necessary to show the developers who need lots of re-building how to dramatically cut down time spent on compiling.
  
-- Investigation of the current state of the build system and research on how to make NEST test suite to emit the results in JUnit format understood by Jenkins lead to the conclusion that a lot of work on the build system necessary in the long term.
+- Investigation of the current state of the build system and research on how to make NEST test suite to emit the results in `JUnit` format understood by Jenkins lead to the conclusion that a lot of work on the build system necessary in the long term.
   
-    + Work to adapt the NEST testsuite to emit JUnit-compatible output was completed and is currently under review
+    + Work to adapt the NEST test suite to emit `JUnit`-compatible output was completed (currently under review)
   
-    + Patches to get rid of support for libtool 1.5 in the NEST build system and properly package libltdl are under review
+    + Patches to get rid of support for `libtool` 1.5 in the NEST build system and properly package `libltdl` (currently under review)
   
-    + Investigation of the DSO loading issues resulted into a conclusion that rewrite of how the Python bindings are built is necessary; a ticket was created
+    + Investigation of the DSO loading issues resulted into a conclusion that rewrite of how the Python bindings are built is necessary; a ticket was created with some tentative strategies on how to solve the problem
+
+- The QA system was opened for general public, an official announcement is pending. Additional build executors will be introduced shortly after the knowledge transfer meeting, so that there will be a couple of "back-up" administrators that would be able to take care of the system (right now only `fc-15-i386` is available, `fc-15-x86_64`, `rhel-6-i386` and `rhel-6-x86_64` can be easily added using the automation framework that has been developed during the said meeting).
 
 - Everything is mostly ready for packaging, but issues with build system and `make dist` to generate the tarballs automatically from the checkouts have to be figured out first, so in the end this was put off until later.
 
