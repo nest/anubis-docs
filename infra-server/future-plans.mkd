@@ -3,6 +3,10 @@ Future Plans for NEST QA and Infrastructure
 
 - Jenkins
   
+    + Add GCC warnings support to Jenkins
+  
+        * https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
+  
     + Implement parameterized builds
   
       To this end it will be needed to decide on which configurations are needed most, because rebuilding takes time.
