@@ -3,9 +3,6 @@ Future Plans for NEST QA and Infrastructure
 
 - Jenkins
   
-    + Add GCC warnings support to Jenkins
-  
-        * https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
   
     + Implement parameterized builds
   
@@ -19,6 +16,8 @@ Future Plans for NEST QA and Infrastructure
         * --without-readline
         * --without-pthread
         * --without-python
+  
+    + Add a Windows slave for Fiji, license to be ordered via MSDNAA
   
     + Add more build slaves to the system
   
@@ -39,13 +38,7 @@ Future Plans for NEST QA and Infrastructure
   
 - Infrastructure / Puppet
   
-    + *DONE!* Set up smartmontools to monitor virtualization server drives
-  
-    + *DONE!* The IP addresses should be distributed via DHCP
-  
-    + *DONE!* The kickstart generation mess should be improved
-  
-    + Update to Puppet 2.7.3 (beware! new SELinux policy is not out yet, convert join() calls to anonymous arrays, check release notes, to see if anything else needs to be revised...)
+    + *IN PROGRESS* (Update: my SELinux policy fixes are now included in RHEL6.2) Update to Puppet 2.7.3 (beware! new SELinux policy is not out yet, convert join() calls to anonymous arrays, check release notes, to see if anything else needs to be revised...)
   
     + libvirt management should be split into a separate module
   
@@ -102,4 +95,20 @@ Future Plans for NEST QA and Infrastructure
     + Introduce feature branch based workflow
   
     + Introduce code reviews for stuff that gets into `master`
+
+Already completed
+-----------------
+
+- Add GCC warnings support to Jenkins (done during regular maintenance in November, 2011)
+  
+    * https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
+
+- Infrastructure / Puppet
+  
+    + *DONE!* Set up smartmontools to monitor virtualization server drives
+  
+    + *DONE!* The IP addresses should be distributed via DHCP
+  
+    + *DONE!* The kickstart generation mess should be improved
+  
 
