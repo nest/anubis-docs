@@ -3,8 +3,7 @@ Future Plans for NEST QA and Infrastructure
 
 - Jenkins
   
-  
-    + Implement parameterized builds
+    + *IN PROGRESS* Implement parameterized builds
   
       To this end it will be needed to decide on which configurations are needed most, because rebuilding takes time.
       
@@ -17,16 +16,20 @@ Future Plans for NEST QA and Infrastructure
         * --without-pthread
         * --without-python
   
-    + Add a Windows slave for Fiji, license to be ordered via MSDNAA
+      Decided on
+  
+        * GSL
+        * MPI
+        * Python
+  
+    + *IN PROGRESS* Set up a multi-host build configuration for `trunk`
   
     + Add more build slaves to the system
   
-        * Fedora Core 15 `x86_64` host
+        * Fedora Core 16 `x86_64` host
         * Scientific Linux 6 `i386` and `x86_64`
         * Debian Testing (need to figure out kickstarting!)
         * Exotic systems, e.g. FreeBSD, Solaris
-  
-    + Set up a multi-host build configuration for `trunk`
   
     + Fix `make dist` and add tarball generation to the build job
   
@@ -38,15 +41,11 @@ Future Plans for NEST QA and Infrastructure
   
 - Infrastructure / Puppet
   
-    + *IN PROGRESS* (Update: my SELinux policy fixes are now included in RHEL6.2) Update to Puppet 2.7.3 (beware! new SELinux policy is not out yet, convert join() calls to anonymous arrays, check release notes, to see if anything else needs to be revised...)
+    + *IN PROGRESS* Machines should be fully described by hashes in `libvirt::params`, classes for host entries and maybe LVM volumes (at least _main_ and _swap_) should be generated automatically; now need to figure out how to concatenate hashes
   
     + libvirt management should be split into a separate module
   
     + Machine definitions should be managed by Puppet
-  
-    + Move `ks_info` members to `ks_guest` (hashes in `libvirt::params`)
-  
-    + Machines should be fully described by hashes in `libvirt::params`, classes for host entries and maybe LVM volumes (at least _main_ and _swap_) should be generated automatically
   
     + Put `/srv/infra/isos` on a dedicated volume group on the slow drives one day; shrink the root to make more space for other needs
   
@@ -69,6 +68,8 @@ Future Plans for NEST QA and Infrastructure
             This is probably the way to go, has both graphing and notifications, but the complexity is kept at a reasonable level
   
 - NEST build system and infrastructure
+  
+    + *IN PROGRESS* Patch the build system to generate jUnit-compatible output (done for SLI tests, Python test suite is being worked on)
   
     + Sort out issues that prevent packaging and *DO IT*
   
@@ -99,11 +100,19 @@ Future Plans for NEST QA and Infrastructure
 Already completed
 -----------------
 
-- Add GCC warnings support to Jenkins (done during regular maintenance in November, 2011)
+- Jenkins
   
-    * https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
-
+    + *DONE!* Add a Windows slave for Fiji, license to be ordered via MSDNAA
+  
+    + *DONE!* Add GCC warnings support to Jenkins (done during regular maintenance in November, 2011)
+  
+        * https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin
+  
 - Infrastructure / Puppet
+  
+    + *DONE!* (Update: my SELinux policy fixes are now included in RHEL6.2) Update to Puppet 2.7.3 (beware! new SELinux policy is not out yet, convert join() calls to anonymous arrays, check release notes, to see if anything else needs to be revised...); updated to Puppet 2.7.9
+  
+    + *DONE!* Move `ks_info` members to `ks_guest` (hashes in `libvirt::params`)
   
     + *DONE!* Set up smartmontools to monitor virtualization server drives
   
