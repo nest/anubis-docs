@@ -94,8 +94,6 @@ Bootstrapping
   
     + Add node settings into Puppet that would apply to this new host (`nodes.pp`)
   
-    + *Remember*, for now when `libvirt` network is restarted, you need to re-attach the interfaces or simply reboot all the guests for them to re-gain network connectivity; hopefully `libvirt` people will fix it at some point
-  
     + To manually add a guest via `virt-manager` (should be eventually done through Puppet):
   
         * Enable X Forwarding in your local `~/.ssh/config`
@@ -113,6 +111,9 @@ Bootstrapping
   
         * For _Fedora Core 15_ (only DVD version can be kickstarted):
             - `vmlinuz initrd=initrd.img updates=http://puppet.qa.nest-initiative.org/kickstarts/fc-15-updates.img ks=http://puppet.qa.nest-initiative.org/kickstarts/fc-15-i386-ks.cfg`
+  
+        * For _Fedora Core 16_ (only DVD version can be kickstarted):
+            - `vmlinuz initrd=initrd.img ks=http://puppet/kickstarts/fc-16-i386-ks.cfg`
   
         * For _Red Hat Enterprise Linux 6_:
             - `vmlinuz initrd=initrd.img ks=http://puppet.qa.nest-initiative.org/kickstarts/jenkins-ks.cfg`
