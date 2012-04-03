@@ -11,6 +11,7 @@ SOURCES = \
 	infra-server/future-plans.mkd \
 	infra-server/host-partitioning.mkd \
 	infra-server/setup-guide.mkd \
+	infra-server/hardware.mkd \
 
 TARGETS = $(SOURCES:%.mkd=$(OUTDIR)/%.html)
 

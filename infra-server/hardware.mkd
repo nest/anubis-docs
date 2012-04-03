@@ -1,0 +1,37 @@
+Virtualization server hardware notes
+====================================
+
+Memory configuration
+--------------------
+
+The system contains 18 memory sockets split into two sets of nine sockets, one set for each processor. Each nine-socket set is organized into three channels of three memory sockets per channel. The first socket of each channel is marked with white release levers.
+
+Single-rank and dual-rank RDIMMs of sizes 2 GB, 4 GB, 8 GB, and 16 GB are supported for a total of up to 288 GB. Memory modules of different sizes can be mixed within a memory channel (for example, 2 GB, 8 GB, and 4 GB), but all populated channels must have identical configurations.
+
+    # ./memconf 
+    memconf:  V2.22 30-Jan-2012 http://www.4schmidts.com/unix.html
+    hostname: puppet.qa.nest-initiative.org
+    Dell Inc. PowerEdge R710 (2 X Six-Core Hyper-Threaded Intel(R) Xeon(R) X5680 @ 3.33GHz)
+    Memory Error Correction: Multi-bit ECC
+    Maximum Memory: 294912MB (288GB)
+    DIMM_A1: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A2: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A3: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A4: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A5: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A6: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_B1: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
+    DIMM_B2: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
+    DIMM_B3: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_B4: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
+    DIMM_B5: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
+    DIMM_B6: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
+    empty memory sockets: DIMM_A7, DIMM_A8, DIMM_A9, DIMM_B7, DIMM_B8, DIMM_B9
+    total memory = 49152MB (48GB)
+
+Pricing:
+
+    2 x Kingston ValueRAM DIMM 12 GB ECC Registered DDR3-1333 Tri-Kit = € 117,90 x 2
+    2 x Kingston ValueRAM DIMM 24 GB ECC Registered DDR3-1333 Tri-Kit = € 217,90 x 2
+    1 x Kingston ValueRAM DIMM 16 GB ECC Registered DDR3-1333         = € 494,-  x 1
+
