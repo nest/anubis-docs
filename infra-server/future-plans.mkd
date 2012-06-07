@@ -31,6 +31,10 @@ Future Plans for NEST QA and Infrastructure
         * Debian Testing (need to figure out kickstarting!)
         * Exotic systems, e.g. FreeBSD, Solaris
   
+    + Figure out why Jenkins Git plugin can't identify e-mails from commits
+  
+    + Increase the number of vcpus assigned to the Windows build host
+  
     + Fix `make dist` and add tarball generation to the build job
   
     + Build from bootstrapped tarballs, not checkouts
