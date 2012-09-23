@@ -56,8 +56,8 @@ The virtualization server itself and privileged guests, such as the Jenkins serv
 
 The following people have [Red Hat accounts][redhat-account] entitled to access RHN at this point:
 
-- Yury V. Zaytsev (BCF)
-- Bernd Wiebelt (BCF / FZ-J)
+- Yury V. Zaytsev (FZJ)
+- Bernd Wiebelt (FZJ)
 
   [redhat-account]: https://www.redhat.com/wapps/ugc
 
@@ -75,7 +75,7 @@ Bootstrapping
     + Install infra packages via `yum localinstall ...` (`puppet`, `puppet-server` etc.)
   
     + Install `git`, clone the configuration in `/etc/puppet` and apply it:
-        * `git clone git://git.zaytsev.net/anubis-puppet.git /etc/puppet`
+        * `git clone git://github.com/nest/anubis-puppet.git /etc/puppet`
         * `cd /etc/puppet`
         * `git submodule init`
         * `git submodule update`
