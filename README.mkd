@@ -1,8 +1,8 @@
-Documentation for NEST Service Infrastructure
-=============================================
+Documentation for NEST QA infrastructure
+========================================
 
 This repository contains miscellaneous documentation that pertains to the
-NEST service infrastructure project.
+NEST QA infrastructure project.
 
 License
 -------
