@@ -1,6 +1,9 @@
 Notes on virtualization
 =======================
 
+General discussion
+------------------
+
 The major issue that has so far impeded the widespread adoption of full virtualization solutions is the high resource overhead incurred from simultaneously running many operating system instances (memory penalty) and trapping critical instructions to provide proper isolation between different system domains on x86 hardware that dominated the general-purpose computer market (processor cycles penalty).
 
 Several lightweight virtualization systems have been developed to address these problems (OpenVZ and LXC for Linux, FreeBSD jails, Solaris Zones, etc.), although significant performance improvements came at the price of reduced flexibility. Most notably, it is not possible to use such containers with operating system kernels that were not specifically designed to run in virtualized mode, for example, we cannot run Microsoft Windows inside an OpenVZ domain. Even while staying within the same class of operating systems, it is problematic to run newer Linux distributions as guests on top of an older stable OpenVZ host kernel, as newer application software may well be dependent upon APIs unsupported in older kernels.
@@ -11,3 +14,11 @@ As discussed above, allocating large amounts of memory in order to keep many ide
 
 [cs-arcangeli2009]: https://www.kernel.org/doc/ols/2009/ols2009-pages-19-28.pdf "Arcangeli, A.; Eidus, I. & Wright, C. (2009), Increasing memory density by using KSM, in 'Proceedings of the Linux Symposium', pp. 19--28."
 [cs-chang2011]: http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=5951913 "Chang, C.-R.; Wu, J.-J. & Liu, P. (2011), An Empirical Study on Memory Sharing of Virtual Machines for Server Consolidation, in 'Proc. IEEE 9th Int Parallel and Distributed Processing with Applications (ISPA) Symp', pp. 244--249."
+
+Resource provisioning with Puppet
+---------------------------------
+
+Adding a new build slave into the system requires the operator to first append a block that contains various information about the machine to the Puppet manifest, such as desired hostname, network settings and storage requirements.
+
+Then the operator only needs to point the operating system installer to the generated kickstart file and wait for Puppet to bring this new host into compliance after signing its X.509 certificate on the server side (which is then used to identify guest agent).
+
