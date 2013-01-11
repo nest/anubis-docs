@@ -173,7 +173,11 @@ The Jenkins server (RHEL 6) is running at `jenkins.qa.nest-initiative.org`. It s
 
 - The server itself only coordinates slaves, it doesn't do builds, and please keep it this way.
 
-- The SSL certificate is self-signed for the time being.
+- The SSL certificate is self-signed for the time being. You need to add `-noCertificateCheck` to the end of the `<arguments>` element of `jenkins-slave.xml` on the Windows slaves for it to work.
+
+- Windows slaves need to authenticate against master in order to use the JNLP protocol; to this end, an account is created that is granted rights to connect and disconnect slaves with the username of `slave`. Additionally, [Apache Commons Codec library][apache-commons] is needed. The following should be added to `jenkins-slave.xml`: `-classpath "%BASE%\commons-codec-1.7.jar" -jnlpCredentials slave:password`.
+
+  [apache-commons]: http://commons.apache.org/codec/download_codec.cgi
 
 *WARNING!* Do _NOT_ upgrade Jenkins server without backing up the Jenkins home directory (`/var/lib/jenkins`) first! I can't stress this enough. Just don't do it, OK? Thanks!
 
