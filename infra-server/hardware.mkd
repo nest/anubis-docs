@@ -31,7 +31,5 @@ Single-rank and dual-rank RDIMMs of sizes 2 GB, 4 GB, 8 GB, and 16 GB are suppor
 
 Pricing:
 
-    2 x Kingston ValueRAM DIMM 12 GB ECC Registered DDR3-1333 Tri-Kit = € 117,90 x 2
-    2 x Kingston ValueRAM DIMM 24 GB ECC Registered DDR3-1333 Tri-Kit = € 217,90 x 2
-    1 x Kingston ValueRAM DIMM 16 GB ECC Registered DDR3-1333         = € 494,-  x 1
-
+    3 x Kingston ValueRAM DIMM 32 GB ECC Registered DDR3-1333 Kit (KVR13R9D4K2/32)           = € 289    x 3 = € 867     -> +96G
+    2 x Kingston ValueRAM DIMM 24 GB ECC Registered DDR3-1333 Tri-Kit (KVR1333D3D4R9SK3/24G) = € 202,90 x 2 = € 405.8   -> +48G
