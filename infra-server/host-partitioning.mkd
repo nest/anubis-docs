@@ -102,8 +102,7 @@ Partition sizes:
 
 * 16G: `/dev/vg_anubis_fast/host_tmp`
 * 24G: `/dev/vg_anubis_fast/host_root`
-* 24G: `/dev/vg_anubis_fast/host_var`
-* 16G: `/dev/vg_anubis_slow/host_var_log`
+* 32G: `/dev/vg_anubis_slow/host_var_full`
 * 96G: `/dev/vg_anubis_slow/host_swap`
 
 Mount options: see `./manifests/files/puppet/fstab`. Partitions residing on SSD drive are to be mounted with *relatime* to prevent pre-mature wear-out.
