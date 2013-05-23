@@ -20,16 +20,17 @@ Single-rank and dual-rank RDIMMs of sizes 2 GB, 4 GB, 8 GB, and 16 GB are suppor
     DIMM_A4: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
     DIMM_A5: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
     DIMM_A6: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
+    DIMM_A7: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-024.A00LF
+    DIMM_A8: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-024.A00LF
+    DIMM_A9: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-079.A00LF
     DIMM_B1: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
     DIMM_B2: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
     DIMM_B3: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170FHD-CH9
     DIMM_B4: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
     DIMM_B5: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
     DIMM_B6: 4096MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Samsung M393B5170EH1-CH9
-    empty memory sockets: DIMM_A7, DIMM_A8, DIMM_A9, DIMM_B7, DIMM_B8, DIMM_B9
-    total memory = 49152MB (48GB)
-
-Pricing:
-
-    3 x Kingston ValueRAM DIMM 32 GB ECC Registered DDR3-1333 Kit (KVR13R9D4K2/32)           = € 289    x 3 = € 867     -> +96G
-    2 x Kingston ValueRAM DIMM 24 GB ECC Registered DDR3-1333 Tri-Kit (KVR1333D3D4R9SK3/24G) = € 202,90 x 2 = € 405.8   -> +48G
+    DIMM_B7: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-079.A00LF
+    DIMM_B8: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-079.A00LF
+    DIMM_B9: 16384MB 1333MHz Synchronous Registered (Buffered) DDR3 DIMM, Kingston 9965516-079.A00LF
+    empty memory sockets: None
+    total memory = 147456MB (144GB)
