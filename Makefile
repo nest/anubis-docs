@@ -9,9 +9,10 @@ SOURCES = \
 	gsoc-report/README.mkd \
 	infra-server/backup-strategy.mkd \
 	infra-server/future-plans.mkd \
+	infra-server/hardware.mkd \
 	infra-server/host-partitioning.mkd \
 	infra-server/setup-guide.mkd \
-	infra-server/hardware.mkd \
+	infra-server/ssl-certificate.mkd \
 	infra-server/virtualization.mkd \
 
 TARGETS = $(SOURCES:%.mkd=$(OUTDIR)/%.html)

@@ -1,0 +1,19 @@
+Jenkins SSL certificate
+=======================
+
+To create a new SSL certificate:
+
+    openssl req -new -newkey rsa:4096 -days 365 -nodes -keyout qa.nest-initiative.org.key -out qa.nest-initiative.org.csr
+
+Perform verification if needed, upload the CSR to StartCom and download the signed CRT file. Convert the certificate / key pair into the `p12` format:
+
+    openssl pkcs12 -export -in qa.nest-initiative.org.crt -inkey qa.nest-initiative.org.key -out qa.nest-initiative.org.p12 -name "qa.nest-initiative.org"
+
+Download StartCom CA certificates:
+
+  * Toolbox > StartCom CA Certificates: Download "StartCom Root CA (PEM encoded)" (ca.pem)
+  * Toolbox > StartCom CA Certificates: Download "Class 1 Intermediate Server CA" (sub.class1.server.ca.pem).
+
+Now use [Portecle][portecle] to covert the `p12` keystore into a `jks`, and also include the CA certificates in there for completeness.
+
+[portecle]: http://portecle.sourceforge.net
