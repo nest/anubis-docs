@@ -7,7 +7,7 @@ Future Plans for NEST QA and Infrastructure
   
     + Add more build slaves to the system
   
-        * Fedora Core 18 `i386` / `x86_64` hosts
+        * Fedora Core 19 `i386` / `x86_64` hosts
         * Scientific Linux 6 `i386` and `x86_64`
         * Debian Testing (need to figure out kickstarting!)
         * Exotic systems, e.g. FreeBSD, Solaris
@@ -19,8 +19,6 @@ Future Plans for NEST QA and Infrastructure
     + Build from bootstrapped tarballs, not checkouts
   
     + Adapt the release scripts to cut releases from the QA
-  
-    + Consider getting an SSL certificate from DFN
   
 - Infrastructure / Puppet
   
@@ -70,8 +68,6 @@ Future Plans for NEST QA and Infrastructure
   
     + Integrate disparate tests in a common test suite
   
-    + Remove library versioning that depends on keywords expansion
-  
     + *IN PROGRESS* Set up a git mirror; later migrate to git completely
   
     + *IN PROGRESS* Introduce feature branch based workflow
@@ -110,6 +106,8 @@ Already completed
         * MPI
         * Python
   
+    + *DONE!* Consider getting an SSL certificate from DFN (got one from StartCom)
+  
 - Infrastructure / Puppet
   
     + *DONE!* Put `/srv/infra/isos` on a dedicated volume group on the slow drives one day; shrink the root to make more space for other needs
@@ -124,4 +122,7 @@ Already completed
   
     + *DONE!* The kickstart generation mess should be improved
   
-
+- NEST build system and infrastructure
+  
+    + *DONE!* Remove library versioning that depends on keywords expansion
+  
